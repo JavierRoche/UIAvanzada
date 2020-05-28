@@ -31,6 +31,8 @@ class TopicsViewController: UIViewController {
         button.image = UIImage.init(named: "icoNew")
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = true
+        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(newTopic)))
         return button
     }()
     
@@ -53,6 +55,7 @@ class TopicsViewController: UIViewController {
         ])
         
         view.addSubview(newButton)
+        view.bringSubviewToFront(newButton)
         NSLayoutConstraint.activate([
             newButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15.0),
             newButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12.0)
@@ -72,9 +75,6 @@ class TopicsViewController: UIViewController {
         let searchRightBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchTopic))
         searchRightBarButtonItem.tintColor = UIColor.tangerine
         navigationItem.rightBarButtonItem = searchRightBarButtonItem
-        let plusLeftBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(plusTopic))
-        plusLeftBarButtonItem.tintColor = UIColor.tangerine
-        navigationItem.leftBarButtonItem = plusLeftBarButtonItem
         
         /// Recuperamos los datos de la tabla
         getData()
@@ -134,8 +134,11 @@ class TopicsViewController: UIViewController {
         print("searchTopic")
     }
     
-    @objc private func plusTopic() {
-        print("plusTopic")
+    @objc private func newTopic(_ sender: UITapGestureRecognizer) {
+        let newTopicViewController: NewTopicViewController = NewTopicViewController.init()
+        let navigationController: UINavigationController = UINavigationController.init(rootViewController: newTopicViewController)
+        navigationController.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .formSheet : .automatic
+        self.present(navigationController, animated: true, completion: nil)
     }
 }
 
