@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol WellcomeCellDelegate: class {
+    func takeOffWellcomeCell()
+}
+
 class WellcomeCell: UITableViewCell {
     let caMessageTitle: String = "Wellcome e eh.ho"
     let caMessageContent: String = "Discourse Setup The first\nparagraph of this pinned topic"
@@ -16,6 +20,7 @@ class WellcomeCell: UITableViewCell {
     let messageTitle: UILabel = UILabel()
     let messageContent: UILabel = UILabel()
     let pushpinImage: UIImageView = UIImageView()
+    weak var delegate: WellcomeCellDelegate?
     
     func configureCell() {
         /// Creamos la jerarquia de elementos de la celda
@@ -40,6 +45,8 @@ class WellcomeCell: UITableViewCell {
         /// Propiedades de la UIImageView
         pushpinImage.image = UIImage.init(named: "pushpin")
         pushpinImage.contentMode = .scaleAspectFit
+        pushpinImage.isUserInteractionEnabled = true
+        pushpinImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushpinImageTapped)))
         
         /// Fijamos las constraints de los elementos
         setConstraints()
@@ -90,5 +97,10 @@ class WellcomeCell: UITableViewCell {
 //            messageTitle.widthAnchor.constraint(equalToConstant: 28),
 //            messageTitle.heightAnchor.constraint(equalToConstant: 28)
         ])
+    }
+    
+    @objc private func pushpinImageTapped(_ sender: UITapGestureRecognizer) {
+        print("pushpinImageTapped")
+        delegate?.takeOffWellcomeCell()
     }
 }

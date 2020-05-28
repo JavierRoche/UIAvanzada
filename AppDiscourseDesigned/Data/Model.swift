@@ -24,7 +24,7 @@ struct LatestTopicsResponse: Codable {
 struct User: Codable {
     let id: Int
     let username: String
-    let name: String
+    let name: String?
     let avatarTemplate: String
     
     enum CodingKeys: String, CodingKey {
@@ -60,6 +60,20 @@ struct Topic: Codable {
 }
 
 struct Poster: Codable {}
+
+
+// MARK: Users Response Model: User List
+
+struct UsersDirectoryResponse: Codable {
+    let directoryItems: [Users]
+    enum CodingKeys: String, CodingKey {
+        case directoryItems = "directory_items"
+    }
+}
+
+struct Users: Codable {
+    let user: User
+}
 
 
 // MARK: Error Response Model

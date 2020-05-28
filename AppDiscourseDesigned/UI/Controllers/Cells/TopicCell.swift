@@ -9,7 +9,7 @@
 import UIKit
 
 class TopicCell: UITableViewCell {
-    let caDateInputFormat = "YYYY-MM-DD'T'HH:mm:ss.SSSZ"    // "2020-01-19T19:28:16.151Z"
+    let caDateInputFormat = "YYYY-MM-dd'T'HH:mm:ss.SSSZ"    // "2020-01-19T19:28:16.151Z"
     let caDateOutputFormat = "MMM d"                        // May 25
     let avatarImage: UIImageView = UIImageView()
     let topicTitle: UILabel = UILabel()
@@ -24,11 +24,7 @@ class TopicCell: UITableViewCell {
     let dateImage: UIImageView = UIImageView()
     let dateLabel: UILabel = UILabel()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    func configureCell(topic: Topic) {
+    public func configureCell(topic: Topic) {
         /// Aplicamos la jerarquia de vistas
         setViewsHierarchy()
         
@@ -83,6 +79,7 @@ class TopicCell: UITableViewCell {
         /// Propiedades de la vista
         self.backgroundColor = UIColor.white246
         /// Propiedades de la UIImageView
+        avatarImage.alpha = 0   // <--------------------------------------
         avatarImage.layer.masksToBounds = true
         avatarImage.layer.cornerRadius = 32.0
         /// Propiedades del label para el titulo del topic
@@ -107,17 +104,25 @@ class TopicCell: UITableViewCell {
         dateImage.image = UIImage.init(named: "icoSmallCalendar")
         dateImage.contentMode = .scaleAspectFit
         dateLabel.font = UIFont.dateStyle
+        dateLabel.tintColor = UIColor.gray   // <----
     }
     
     fileprivate func setAvatarImage(avatarURL: String) {
         DispatchQueue.global(qos:.userInitiated).async { [weak self] in
-            guard let avatarURL: URL = URL(string: avatarURL),
-                    let data = try? Data(contentsOf: avatarURL) else { return }
+            guard let self = self,
+                  let avatarURL: URL = URL(string: avatarURL),
+                  let data = try? Data(contentsOf: avatarURL) else { return }
             DispatchQueue.main.async {
-                self?.avatarImage.image = UIImage(data: data)
-                self?.avatarImage.setNeedsLayout()
+                self.avatarImage.image = UIImage(data: data)
+                UIView.animate(withDuration: 0.6) {
+                    self.avatarImage.alpha = 1
+                }
+                self.avatarImage.setNeedsLayout()
             }
         }
+        
+        /// UIView.animate se le pasa una duracion y un closure. Hay otros constructores
+        
     }
         
     fileprivate func formattedDate(topicDate: String) -> String? {
@@ -127,7 +132,7 @@ class TopicCell: UITableViewCell {
         dateFormatter.locale = Locale(identifier: "es_ES")
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         /// Intentamos aplantillar la fecha recibida al formado dado, y despues ya la sacamos al formato de salida que queramos
-        guard let date = dateFormatter.date(from: topicDate) else { return nil}
+        guard let date = dateFormatter.date(from: topicDate) else { return nil }
         /// Le fijamos el formato de salida y lo pasamos a String con el DateFormatter
         dateFormatter.dateFormat = caDateOutputFormat
         return dateFormatter.string(from: date).capitalized
@@ -152,8 +157,8 @@ class TopicCell: UITableViewCell {
         // MARK: Topic Title constraints
         NSLayoutConstraint.activate([
             /// Ajusta en horizontal a 91 por la izquierda, 14 por arriba y 59 por la derecha del padre.
-            topicTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 91.0),
             topicTitle.topAnchor.constraint(equalTo: self.topAnchor, constant: 14.0),
+            topicTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 91.0),
             topicTitle.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -59.0)
         ])
             

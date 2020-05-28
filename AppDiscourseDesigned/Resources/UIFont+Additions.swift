@@ -38,7 +38,7 @@ extension UIFont {
     return UIFont.systemFont(ofSize: 15.0, weight: .medium)
   }
 
-  class var textStyle: UIFont {
+  class var style15regular: UIFont {
     return UIFont.systemFont(ofSize: 15.0, weight: .regular)
   }
 

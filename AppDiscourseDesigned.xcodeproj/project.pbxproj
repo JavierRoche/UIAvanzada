@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183BA483247E6DB5005D5C75 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183BA482247E6DB5005D5C75 /* UserCell.swift */; };
+		183BA485247E780A005D5C75 /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 183BA484247E780A005D5C75 /* UserCell.xib */; };
 		183D56A1247ACA3800893BD7 /* TopicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183D56A0247ACA3800893BD7 /* TopicCell.swift */; };
 		183D56A3247ACA4E00893BD7 /* Topic Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 183D56A2247ACA4E00893BD7 /* Topic Cell.xib */; };
 		1846476A247C37FD00FCC569 /* UIColor+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18464769247C37FD00FCC569 /* UIColor+Additions.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		183BA482247E6DB5005D5C75 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		183BA484247E780A005D5C75 /* UserCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
 		183D56A0247ACA3800893BD7 /* TopicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicCell.swift; sourceTree = "<group>"; };
 		183D56A2247ACA4E00893BD7 /* Topic Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "Topic Cell.xib"; sourceTree = "<group>"; };
 		18464769247C37FD00FCC569 /* UIColor+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Additions.swift"; sourceTree = "<group>"; };
@@ -64,6 +68,7 @@
 			children = (
 				183D56A0247ACA3800893BD7 /* TopicCell.swift */,
 				1886DF1A247D22B400AC04B4 /* WellcomeCell.swift */,
+				183BA482247E6DB5005D5C75 /* UserCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -73,6 +78,7 @@
 			children = (
 				183D56A2247ACA4E00893BD7 /* Topic Cell.xib */,
 				1886DF1C247D537000AC04B4 /* WellcomeCell.xib */,
+				183BA484247E780A005D5C75 /* UserCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -147,8 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				18A654112477C44B0066270A /* TopicsViewController.xib */,
-				183D569F247AC9DE00893BD7 /* Cells */,
 				18A654152477C5030066270A /* UsersViewController.xib */,
+				183D569F247AC9DE00893BD7 /* Cells */,
 				18A653FE2477BAF60066270A /* LaunchScreen.storyboard */,
 			);
 			path = Views;
@@ -158,8 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				18A6540F2477C42F0066270A /* TopicsViewController.swift */,
-				183D569E247AC9D600893BD7 /* Cells */,
 				18A654132477C4E70066270A /* UsersViewController.swift */,
+				183D569E247AC9D600893BD7 /* Cells */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 				1886DF1D247D537000AC04B4 /* WellcomeCell.xib in Resources */,
 				18A653FD2477BAF60066270A /* Assets.xcassets in Resources */,
 				18A654122477C44B0066270A /* TopicsViewController.xib in Resources */,
+				183BA485247E780A005D5C75 /* UserCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +253,7 @@
 				18A653F62477BAF10066270A /* SceneDelegate.swift in Sources */,
 				18A654142477C4E70066270A /* UsersViewController.swift in Sources */,
 				18A6541A2477EE2B0066270A /* DataProvider.swift in Sources */,
+				183BA483247E6DB5005D5C75 /* UserCell.swift in Sources */,
 				18A654182477E8410066270A /* Model.swift in Sources */,
 				18A654102477C42F0066270A /* TopicsViewController.swift in Sources */,
 				18A6540E2477C2E90066270A /* TabBarProvider.swift in Sources */,

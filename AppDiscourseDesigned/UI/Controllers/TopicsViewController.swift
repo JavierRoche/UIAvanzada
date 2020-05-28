@@ -10,6 +10,8 @@ import UIKit
 
 class TopicsViewController: UIViewController {
     let caDiscourseURLDomain: String = "https://mdiscourse.keepcoding.io"
+    let caRefreshMessage: String = "Pull to refresh"
+    var wellcomed: Bool = false
     var topics: [Topic] = []
     
     /// Definimos y configuramos la tabla
@@ -18,10 +20,9 @@ class TopicsViewController: UIViewController {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.dataSource = self
         table.delegate = self
-        table.register(TopicCell.self, forCellReuseIdentifier: "TopicCell")
-        table.register(WellcomeCell.self, forCellReuseIdentifier: "WellcomeCell")
-        table.estimatedRowHeight = 100
-        table.rowHeight = UITableView.automaticDimension
+        table.refreshControl = refreshControl
+        table.register(TopicCell.self, forCellReuseIdentifier: String(describing: TopicCell.self))
+        table.register(WellcomeCell.self, forCellReuseIdentifier: String(describing: WellcomeCell.self))
         return table
     }()
     
@@ -33,28 +34,29 @@ class TopicsViewController: UIViewController {
         return button
     }()
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refresh: UIRefreshControl = UIRefreshControl()
+        refresh.attributedTitle = NSAttributedString(string: caRefreshMessage)
+        refresh.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return refresh
+    }()
+    
     override func loadView() {
         view = UIView()
 
         view.addSubview(tableView)
-        // MARK: Table constraints
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
         view.addSubview(newButton)
-        // MARK: View father constraints
         NSLayoutConstraint.activate([
             newButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15.0),
             newButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12.0)
         ])
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
     }
     
     override func viewDidLoad() {
@@ -65,6 +67,14 @@ class TopicsViewController: UIViewController {
         self.navigationController?.navigationBar.backgroundColor = UIColor.white246
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black,
                                                                         NSAttributedString.Key.font: UIFont.style34Bold]
+        
+        /// Creacion del boton de lupa y + de la barra de navegacion
+        let searchRightBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchTopic))
+        searchRightBarButtonItem.tintColor = UIColor.tangerine
+        navigationItem.rightBarButtonItem = searchRightBarButtonItem
+        let plusLeftBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(plusTopic))
+        plusLeftBarButtonItem.tintColor = UIColor.tangerine
+        navigationItem.leftBarButtonItem = plusLeftBarButtonItem
         
         /// Recuperamos los datos de la tabla
         getData()
@@ -96,7 +106,11 @@ class TopicsViewController: UIViewController {
                     let avatarURL: String = url.replacingOccurrences(of: "{size}", with: "40")
                     self.topics[index].avatarURL = avatarURL
                 }
-                self.tableView.reloadData()
+                
+                DispatchQueue.main.async {
+                    self.refreshControl.endRefreshing()
+                    self.tableView.reloadData()
+                }
                 
             case .failure(let error):
                 if let errorType = error as? ErrorTypes {
@@ -111,18 +125,46 @@ class TopicsViewController: UIViewController {
             }
         }
     }
+    
+    @objc func refreshData() {
+        getData()
+    }
+    
+    @objc private func searchTopic() {
+        print("searchTopic")
+    }
+    
+    @objc private func plusTopic() {
+        print("plusTopic")
+    }
 }
 
 
 // MARK: Delegate
 
-extension TopicsViewController: UITableViewDelegate {
+extension TopicsViewController: UITableViewDelegate, WellcomeCellDelegate {
+    func takeOffWellcomeCell() {
+        wellcomed = true
+        topics.removeFirst()
+        tableView.reloadData()
+    }
+    
     /// Funcion delegada para altura de celda
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 151
+        switch wellcomed {
+        case true:
+            return 96
+            
+        case false:
+            if indexPath.row == 0 {
+                return 151
+            }
+            return 96
         }
-        return 96
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -135,19 +177,30 @@ extension TopicsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WellcomeCell.self), for: indexPath) as? WellcomeCell {
-                cell.configureCell()
-                return cell
-            }
-            fatalError("")
-
-        } else {
+        switch wellcomed {
+        case true:
             if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TopicCell.self), for: indexPath) as? TopicCell {
                 cell.configureCell(topic: topics[indexPath.row])
                 return cell
             }
-            fatalError("")
+            fatalError("Couldn't create cells")
+            
+        case false:
+            if indexPath.row == 0 {
+                if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WellcomeCell.self), for: indexPath) as? WellcomeCell {
+                    cell.delegate = self
+                    cell.configureCell()
+                    return cell
+                }
+                fatalError("Couldn't create cells")
+
+            } else {
+                if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TopicCell.self), for: indexPath) as? TopicCell {
+                    cell.configureCell(topic: topics[indexPath.row])
+                    return cell
+                }
+                fatalError("Couldn't create cells")
+            }
         }
     }
 }
