@@ -12,6 +12,7 @@ class NewTopicViewController: UIViewController {
     let caViewTitle: String = "Create new topic"
     let caPost: String = "Post"
     let caCancel: String = "Cancel"
+    
     convenience init() {
         self.init(nibName: String(describing: NewTopicViewController.self), bundle: nil)
         

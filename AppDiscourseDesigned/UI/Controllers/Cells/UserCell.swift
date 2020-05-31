@@ -10,8 +10,27 @@ import UIKit
 
 class UserCell: UICollectionViewCell {
     let caDiscourseURLDomain: String = "https://mdiscourse.keepcoding.io"
-    let avatarImage: UIImageView = UIImageView()
-    let nameLabel: UILabel = UILabel()
+    
+    lazy var avatarImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.layer.masksToBounds = true
+        image.layer.cornerRadius = 40.0
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var nameLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.style15regular
+        label.textAlignment = .center
+        label.contentMode = .top
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+
+    //MARK: Init
     
     public func configureCell(user: User) {
         /// Aplicamos la jerarquia de vistas y propiedades
@@ -33,15 +52,6 @@ class UserCell: UICollectionViewCell {
         /// Creamos la jerarquia de elementos de la celda
         self.addSubview(avatarImage)
         self.addSubview(nameLabel)
-        
-        /// Propiedades de la UIImageView
-        avatarImage.layer.masksToBounds = true
-        avatarImage.layer.cornerRadius = 40.0
-        /// Propiedades del label para el titulo del topic
-        nameLabel.font = UIFont.style15regular
-        nameLabel.textAlignment = .center
-        nameLabel.contentMode = .top
-        nameLabel.numberOfLines = 2
     }
     
     fileprivate func setAvatarImage(avatarURL: String) {
@@ -58,19 +68,13 @@ class UserCell: UICollectionViewCell {
     }
     
     fileprivate func setConstraints() {
-        /// Linea obligatoria cuando creamos vistas autolayout-ables por codigo
-        avatarImage.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-        // MARK: Avatar constraints
         NSLayoutConstraint.activate([
             avatarImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0),
             avatarImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 7.0),
             avatarImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -7.0),
             avatarImage.heightAnchor.constraint(equalToConstant: 80.0)
         ])
-            
-        // MARK: Name Label constraints
+
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: avatarImage.bottomAnchor, constant: 9.0),
             nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),

@@ -9,53 +9,51 @@
 import UIKit
 
 extension UIFont {
-
-  class var degradado: UIFont {
-    return UIFont(name: "Monaco", size: 60.0)!
-  }
-
-  class var style34Bold: UIFont {
-    return UIFont.systemFont(ofSize: 34.0, weight: .bold)
-  }
+    class var style34Bold: UIFont {
+        return UIFont.systemFont(ofSize: 34.0, weight: .bold)
+    }
     
-  class var style22bold: UIFont {
-    return UIFont.systemFont(ofSize: 22.0, weight: .bold)
-  }
+    class var style28Bold: UIFont {
+        return UIFont.systemFont(ofSize: 28.0, weight: .bold)
+    }
     
-  class var style17semibold: UIFont {
-    return UIFont.systemFont(ofSize: 17.0, weight: .semibold)
-  }
-
-  class var style17regular: UIFont {
-    return UIFont.systemFont(ofSize: 17.0, weight: .regular)
-  }
+    class var style22bold: UIFont {
+        return UIFont.systemFont(ofSize: 22.0, weight: .bold)
+    }
     
-  class var titularPequeO: UIFont {
-    return UIFont.systemFont(ofSize: 16.0, weight: .semibold)
-  }
-
-  class var avatar: UIFont {
-    return UIFont.systemFont(ofSize: 15.0, weight: .medium)
-  }
-
-  class var style15regular: UIFont {
-    return UIFont.systemFont(ofSize: 15.0, weight: .regular)
-  }
-
-  class var countsStyle: UIFont {
-    return UIFont.systemFont(ofSize: 14.0, weight: .regular)
-  }
+    class var style18bold: UIFont {
+        return UIFont.systemFont(ofSize: 18.0, weight: .bold)
+    }
     
-  class var dateStyle: UIFont {
-    return UIFont.systemFont(ofSize: 14.0, weight: .bold)
-  }
+    class var style18regular: UIFont {
+        return UIFont.systemFont(ofSize: 18.0, weight: .regular)
+    }
     
-  class var textoPequeO: UIFont {
-    return UIFont.systemFont(ofSize: 12.0, weight: .medium)
-  }
+    class var style17semibold: UIFont {
+        return UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+    }
+    
+    class var style17regular: UIFont {
+        return UIFont.systemFont(ofSize: 17.0, weight: .regular)
+    }
 
-  class var menu: UIFont {
-    return UIFont.systemFont(ofSize: 11.0, weight: .medium)
-  }
+    class var style15regular: UIFont {
+        return UIFont.systemFont(ofSize: 15.0, weight: .regular)
+    }
 
+    class var countsStyle: UIFont {
+        return UIFont.systemFont(ofSize: 14.0, weight: .regular)
+    }
+    
+    class var dateStyle: UIFont {
+        return UIFont.systemFont(ofSize: 14.0, weight: .bold)
+    }
+    
+    class var style13regular: UIFont {
+        return UIFont.systemFont(ofSize: 13.0, weight: .regular)
+    }
+    
+    class var style11regular: UIFont {
+        return UIFont.systemFont(ofSize: 11.0, weight: .regular)
+    }
 }

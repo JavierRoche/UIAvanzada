@@ -15,59 +15,60 @@ protocol WellcomeCellDelegate: class {
 class WellcomeCell: UITableViewCell {
     let caMessageTitle: String = "Wellcome e eh.ho"
     let caMessageContent: String = "Discourse Setup The first\nparagraph of this pinned topic"
-    let view: UIView = UIView()
-    let tangerineView: UIView = UIView()
-    let messageTitle: UILabel = UILabel()
-    let messageContent: UILabel = UILabel()
-    let pushpinImage: UIImageView = UIImageView()
     weak var delegate: WellcomeCellDelegate?
     
-    func configureCell() {
+    lazy var tangerineView: UIView = {
+        let view: UIView = UIView()
+        view.layer.cornerRadius = 8.0
+        view.backgroundColor = UIColor.tangerine
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.style22bold
+        label.numberOfLines = 0
+        label.text = caMessageTitle
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var messageContent: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.style17regular
+        label.numberOfLines = 2
+        label.text = caMessageContent
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var pushpinImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.image = UIImage.init(named: "pushpin")
+        image.contentMode = .scaleAspectFit
+        image.isUserInteractionEnabled = true
+        image.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushpinImageTapped)))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    
+    // MARK: Init
+    
+    public func configureCell() {
         /// Creamos la jerarquia de elementos de la celda
-        addSubview(view)
-        view.addSubview(tangerineView)
-        view.addSubview(messageTitle)
-        view.addSubview(messageContent)
-        view.addSubview(pushpinImage)
-        
-        /// Propiedades de la celda
         self.backgroundColor = UIColor.black
-        /// Propiedades de la pegatina
-        tangerineView.layer.cornerRadius = 8.0
-        tangerineView.backgroundColor = UIColor.tangerine
-        /// Propiedades de los label
-        messageTitle.font = UIFont.style22bold
-        messageTitle.numberOfLines = 0
-        messageTitle.text = caMessageTitle
-        messageContent.font = UIFont.style17regular
-        messageContent.numberOfLines = 2
-        messageContent.text = caMessageContent
-        /// Propiedades de la UIImageView
-        pushpinImage.image = UIImage.init(named: "pushpin")
-        pushpinImage.contentMode = .scaleAspectFit
-        pushpinImage.isUserInteractionEnabled = true
-        pushpinImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(pushpinImageTapped)))
+        self.addSubview(tangerineView)
+        self.addSubview(titleLabel)
+        self.addSubview(messageContent)
+        self.addSubview(pushpinImage)
         
         /// Fijamos las constraints de los elementos
         setConstraints()
     }
     
     fileprivate func setConstraints() {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        tangerineView.translatesAutoresizingMaskIntoConstraints = false
-        messageTitle.translatesAutoresizingMaskIntoConstraints = false
-        messageContent.translatesAutoresizingMaskIntoConstraints = false
-        pushpinImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        // MARK: View father constraints
-        NSLayoutConstraint.activate([
-            view.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            view.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            view.widthAnchor.constraint(equalToConstant: contentView.bounds.width),
-            view.heightAnchor.constraint(equalToConstant: contentView.bounds.height)
-        ])
-        
-        // MARK: Tangerine View constraints
         NSLayoutConstraint.activate([
             tangerineView.topAnchor.constraint(equalTo: self.topAnchor, constant: 25.0),
             tangerineView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16.0),
@@ -75,32 +76,29 @@ class WellcomeCell: UITableViewCell {
             tangerineView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -23.0)
         ])
 
-        // MARK: Message Title constraints
         NSLayoutConstraint.activate([
-            messageTitle.topAnchor.constraint(equalTo: tangerineView.topAnchor, constant: 9),
-            messageTitle.leadingAnchor.constraint(equalTo: tangerineView.leadingAnchor, constant: 18),
-            messageTitle.rightAnchor.constraint(equalTo: tangerineView.rightAnchor, constant: 46),
-            messageTitle.heightAnchor.constraint(equalToConstant: 28)
+            titleLabel.topAnchor.constraint(equalTo: tangerineView.topAnchor, constant: 9),
+            titleLabel.leadingAnchor.constraint(equalTo: tangerineView.leadingAnchor, constant: 18),
+            titleLabel.rightAnchor.constraint(equalTo: tangerineView.rightAnchor, constant: 46),
+            titleLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
 
-        // MARK: Message Title constraints
         NSLayoutConstraint.activate([
-            messageContent.topAnchor.constraint(equalTo: messageTitle.bottomAnchor, constant: 6),
+            messageContent.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
             messageContent.leadingAnchor.constraint(equalTo: tangerineView.leadingAnchor, constant: 18),
             messageContent.rightAnchor.constraint(equalTo: tangerineView.rightAnchor, constant: 73)
         ])
 
-        // MARK: Pushpin constraints
         NSLayoutConstraint.activate([
             pushpinImage.topAnchor.constraint(equalTo: tangerineView.topAnchor, constant: 11),
             pushpinImage.rightAnchor.constraint(equalTo: tangerineView.rightAnchor, constant: -15)
+            /// Sino defines ancho y alto y le dices que coja la imagen original la redimensiona al original
 //            messageTitle.widthAnchor.constraint(equalToConstant: 28),
 //            messageTitle.heightAnchor.constraint(equalToConstant: 28)
         ])
     }
     
     @objc private func pushpinImageTapped(_ sender: UITapGestureRecognizer) {
-        print("pushpinImageTapped")
         delegate?.takeOffWellcomeCell()
     }
 }

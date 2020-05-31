@@ -11,10 +11,10 @@ import UIKit
 class TopicsViewController: UIViewController {
     let caDiscourseURLDomain: String = "https://mdiscourse.keepcoding.io"
     let caRefreshMessage: String = "Pull to refresh"
+    let caTopics: String = "Topics"
     var wellcomed: Bool = false
     var topics: [Topic] = []
     
-    /// Definimos y configuramos la tabla
     lazy var tableView: UITableView = {
         let table: UITableView = UITableView(frame: .zero, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -43,15 +43,29 @@ class TopicsViewController: UIViewController {
         return refresh
     }()
     
+    lazy var searchController: UISearchController = {
+        let search: UISearchController = UISearchController()
+        search.searchResultsUpdater = self
+        search.searchBar.delegate = self
+        search.searchBar.tintColor = UIColor.tangerine
+        search.obscuresBackgroundDuringPresentation = false
+        search.automaticallyShowsCancelButton = true
+        return search
+    }()
+    
+    
+    // MARK: Init
+    
     override func loadView() {
+        /// Esto no lo entiendo muy bien. ¿Por que la view, que en teoria ya es la de self, se le asigna algo vacio? -.-
         view = UIView()
 
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            tableView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
         
         view.addSubview(newButton)
@@ -65,16 +79,13 @@ class TopicsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Topics"
+        /// Asignacion del UISearchController y atributos del navigationController
+        self.navigationItem.searchController = searchController
+        self.title = caTopics
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.backgroundColor = UIColor.white246
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black,
                                                                         NSAttributedString.Key.font: UIFont.style34Bold]
-        
-        /// Creacion del boton de lupa y + de la barra de navegacion
-        let searchRightBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchTopic))
-        searchRightBarButtonItem.tintColor = UIColor.tangerine
-        navigationItem.rightBarButtonItem = searchRightBarButtonItem
         
         /// Recuperamos los datos de la tabla
         getData()
@@ -106,11 +117,12 @@ class TopicsViewController: UIViewController {
                     let avatarURL: String = url.replacingOccurrences(of: "{size}", with: "40")
                     self.topics[index].avatarURL = avatarURL
                 }
-                
-                DispatchQueue.main.async {
-                    self.refreshControl.endRefreshing()
-                    self.tableView.reloadData()
-                }
+
+                /// He dudado (por el RefreshControl) de dejar el DispatchQueue, pues me dijiste que en el viewDidLoad siempre estamos en mainqueue
+//              DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+//              }
                 
             case .failure(let error):
                 if let errorType = error as? ErrorTypes {
@@ -130,10 +142,6 @@ class TopicsViewController: UIViewController {
         getData()
     }
     
-    @objc private func searchTopic() {
-        print("searchTopic")
-    }
-    
     @objc private func newTopic(_ sender: UITapGestureRecognizer) {
         let newTopicViewController: NewTopicViewController = NewTopicViewController.init()
         let navigationController: UINavigationController = UINavigationController.init(rootViewController: newTopicViewController)
@@ -143,22 +151,47 @@ class TopicsViewController: UIViewController {
 }
 
 
-// MARK: Delegate
+// MARK: UISearchControll / UISearchBar Delegate
+
+extension TopicsViewController: UISearchResultsUpdating, UISearchBarDelegate  {
+    /// Funcion delegada de UISearchBar para controlar el click en cancel
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        getData()
+        tableView.reloadData()
+    }
+    
+    /// Funcion delegada de UISearchController que se ejecuta con cada caracter introducido en la UISearchBar
+    func updateSearchResults(for searchController: UISearchController) {
+        let filteredTopics = topics.filter { (topic: Topic) -> Bool in
+            guard let topicTitle = topic.title, let text = searchController.searchBar.text?.lowercased() else { return false }
+            if text == "" { return true }
+            return topicTitle.lowercased().contains(text)
+        }
+        topics = filteredTopics
+        tableView.reloadData()
+    }
+}
+
+
+// MARK: UITableView Delegate
 
 extension TopicsViewController: UITableViewDelegate, WellcomeCellDelegate {
+    /// Funcion delegada que recibe la notificacion de click en la chincheta de la celda de bienvenida
     func takeOffWellcomeCell() {
         wellcomed = true
         topics.removeFirst()
         tableView.reloadData()
     }
     
-    /// Funcion delegada para altura de celda
+    /// Funcion delegada para altura de celda de la tabla
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch wellcomed {
         case true:
+            /// Una vez quitada la celda de bienvenida la altura de la celda es la normal
             return 96
             
         case false:
+            /// Los diferentes tipos de altura hasta que se quita el clip de la chincheta
             if indexPath.row == 0 {
                 return 151
             }
@@ -166,22 +199,27 @@ extension TopicsViewController: UITableViewDelegate, WellcomeCellDelegate {
         }
     }
     
+    /// Funcion delegada para la seleccion de una celda de la tabla
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        /// Deseleccionamos la celda
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 
-// MARK: Data Source
+// MARK: UITableView Data Source
 
 extension TopicsViewController: UITableViewDataSource {
+    /// Funcion delegada del numero de celda de la tabla
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return topics.count
     }
     
+    /// Funcion delegada de llenado de la tabla
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch wellcomed {
         case true:
+            /// Una vez quitada la celda de bienvenida ya todas son normales
             if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TopicCell.self), for: indexPath) as? TopicCell {
                 cell.configureCell(topic: topics[indexPath.row])
                 return cell
@@ -189,6 +227,7 @@ extension TopicsViewController: UITableViewDataSource {
             fatalError("Couldn't create cells")
             
         case false:
+            /// Los diferentes tipos de celda hasta que se quita el clip de la chincheta
             if indexPath.row == 0 {
                 if let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WellcomeCell.self), for: indexPath) as? WellcomeCell {
                     cell.delegate = self

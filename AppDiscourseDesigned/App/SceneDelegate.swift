@@ -14,15 +14,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let tabBar: TabBarProvider = TabBarProvider()
-        
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        let tabBar: TabBarProvider = TabBarProvider.init()
         
         window = UIWindow(windowScene: windowScene)
-//        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-//        window?.rootViewController = tabBar.activeTab()
-        window?.rootViewController = tabBar.start()
+        window?.rootViewController = tabBar.activeTab()
         window?.makeKeyAndVisible()
     }
 
@@ -53,7 +50,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 

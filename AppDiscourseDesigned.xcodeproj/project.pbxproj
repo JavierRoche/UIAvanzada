@@ -28,6 +28,8 @@
 		18A6541A2477EE2B0066270A /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A654192477EE2B0066270A /* DataProvider.swift */; };
 		18E1852A247FEC0700067F28 /* NewTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E18529247FEC0700067F28 /* NewTopicViewController.swift */; };
 		18E1852C247FF46C00067F28 /* NewTopicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1852B247FF46C00067F28 /* NewTopicViewController.xib */; };
+		18E1852E2480208B00067F28 /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1852D2480208B00067F28 /* UserDetailViewController.swift */; };
+		18E18530248021F200067F28 /* UserDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1852F248021F200067F28 /* UserDetailViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		18A654192477EE2B0066270A /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		18E18529247FEC0700067F28 /* NewTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicViewController.swift; sourceTree = "<group>"; };
 		18E1852B247FF46C00067F28 /* NewTopicViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewTopicViewController.xib; sourceTree = "<group>"; };
+		18E1852D2480208B00067F28 /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
+		18E1852F248021F200067F28 /* UserDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserDetailViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,7 @@
 				18A654112477C44B0066270A /* TopicsViewController.xib */,
 				18A654152477C5030066270A /* UsersViewController.xib */,
 				18E1852B247FF46C00067F28 /* NewTopicViewController.xib */,
+				18E1852F248021F200067F28 /* UserDetailViewController.xib */,
 				183D569F247AC9DE00893BD7 /* Cells */,
 				18A653FE2477BAF60066270A /* LaunchScreen.storyboard */,
 			);
@@ -171,6 +176,7 @@
 				18A6540F2477C42F0066270A /* TopicsViewController.swift */,
 				18A654132477C4E70066270A /* UsersViewController.swift */,
 				18E18529247FEC0700067F28 /* NewTopicViewController.swift */,
+				18E1852D2480208B00067F28 /* UserDetailViewController.swift */,
 				183D569E247AC9D600893BD7 /* Cells */,
 			);
 			path = Controllers;
@@ -236,6 +242,7 @@
 			files = (
 				18A654002477BAF60066270A /* LaunchScreen.storyboard in Resources */,
 				183D56A3247ACA4E00893BD7 /* Topic Cell.xib in Resources */,
+				18E18530248021F200067F28 /* UserDetailViewController.xib in Resources */,
 				18A654162477C5030066270A /* UsersViewController.xib in Resources */,
 				18E1852C247FF46C00067F28 /* NewTopicViewController.xib in Resources */,
 				1886DF1D247D537000AC04B4 /* WellcomeCell.xib in Resources */,
@@ -252,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18E1852E2480208B00067F28 /* UserDetailViewController.swift in Sources */,
 				18E1852A247FEC0700067F28 /* NewTopicViewController.swift in Sources */,
 				18A653F42477BAF10066270A /* AppDelegate.swift in Sources */,
 				1846476A247C37FD00FCC569 /* UIColor+Additions.swift in Sources */,

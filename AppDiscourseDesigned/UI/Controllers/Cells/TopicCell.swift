@@ -11,18 +11,99 @@ import UIKit
 class TopicCell: UITableViewCell {
     let caDateInputFormat = "YYYY-MM-dd'T'HH:mm:ss.SSSZ"    // "2020-01-19T19:28:16.151Z"
     let caDateOutputFormat = "MMM d"                        // May 25
-    let avatarImage: UIImageView = UIImageView()
-    let topicTitle: UILabel = UILabel()
-    let groupedStack: UIStackView = UIStackView()
-    let postcountStack: UIStackView = UIStackView()
-    let postcountImage: UIImageView = UIImageView()
-    let postcountLabel: UILabel = UILabel()
-    let postersStack: UIStackView = UIStackView()
-    let postersImage: UIImageView = UIImageView()
-    let postersLabel: UILabel = UILabel()
-    let dateStack: UIStackView = UIStackView()
-    let dateImage: UIImageView = UIImageView()
-    let dateLabel: UILabel = UILabel()
+    
+    lazy var avatarImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.layer.masksToBounds = true
+        image.layer.cornerRadius = 32.0
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.style17semibold
+        label.numberOfLines = 2
+        label.contentMode = .bottomLeft
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var groupedStack: UIStackView = {
+        let stack: UIStackView = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    lazy var postcountStack: UIStackView = {
+        let stack: UIStackView = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    lazy var postcountImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.image = UIImage.init(named: "icoSmallAnswers")
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var postcountLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.countsStyle
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var postersStack: UIStackView = {
+        let stack: UIStackView = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    lazy var postersImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.image = UIImage.init(named: "icoViewsSmall")
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var postersLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.countsStyle
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var dateStack: UIStackView = {
+        let stack: UIStackView = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    lazy var dateImage: UIImageView = {
+        let image: UIImageView = UIImageView()
+        image.image = UIImage.init(named: "icoSmallCalendar")
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    lazy var dateLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.font = UIFont.dateStyle
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    
+    // MARK: Init
     
     public func configureCell(topic: Topic) {
         /// Aplicamos la jerarquia de vistas
@@ -36,7 +117,7 @@ class TopicCell: UITableViewCell {
         setAvatarImage(avatarURL: urlImage)
             
         /// Informamos el titulo del topic
-        topicTitle.text = topic.title
+        titleLabel.text = topic.title
             
         /// Informamos la fecha del stack
         guard let date = topic.lastPostedAt else { return }
@@ -60,7 +141,7 @@ class TopicCell: UITableViewCell {
     fileprivate func setViewsHierarchy() {
         /// Creamos la jerarquia de elementos de la celda
         self.addSubview(avatarImage)
-        self.addSubview(topicTitle)
+        self.addSubview(titleLabel)
         self.addSubview(groupedStack)
         /// Añadimos a cada stack hijo sus elementos
         postcountStack.addArrangedSubview(postcountImage)
@@ -78,33 +159,14 @@ class TopicCell: UITableViewCell {
     fileprivate func setViewProperties() {
         /// Propiedades de la vista
         self.backgroundColor = UIColor.white246
-        /// Propiedades de la UIImageView
-        avatarImage.alpha = 0   // <--------------------------------------
-        avatarImage.layer.masksToBounds = true
-        avatarImage.layer.cornerRadius = 32.0
-        /// Propiedades del label para el titulo del topic
-        topicTitle.font = UIFont.style17semibold
-        topicTitle.contentMode = .bottomLeft
-        topicTitle.numberOfLines = 2
-        /// Propiedades del stack padre
+        /// Propiedades de la UIImageView que hay que definir una vez el objeto creado
+        avatarImage.alpha = 0
+        /// El interespaciado de los stack hay que definirlo una vez el objeto creado
         groupedStack.setCustomSpacing(6, after: postcountStack)
         groupedStack.setCustomSpacing(7, after: postersStack)
-        /// Propiedades del stack hijo postcount
         postcountStack.setCustomSpacing(4, after: postcountImage)
-        postcountImage.image = UIImage.init(named: "icoSmallAnswers")
-        postcountImage.contentMode = .scaleAspectFit
-        postcountLabel.font = UIFont.countsStyle
-        /// Propiedades del stack hijo posters
         postersStack.setCustomSpacing(4, after: postersImage)
-        postersImage.image = UIImage.init(named: "icoViewsSmall")
-        postersImage.contentMode = .scaleAspectFit
-        postersLabel.font = UIFont.countsStyle
-        /// Propiedades del stack hijo date
         dateStack.setCustomSpacing(4, after: dateImage)
-        dateImage.image = UIImage.init(named: "icoSmallCalendar")
-        dateImage.contentMode = .scaleAspectFit
-        dateLabel.font = UIFont.dateStyle
-        dateLabel.tintColor = UIColor.gray   // <----
     }
     
     fileprivate func setAvatarImage(avatarURL: String) {
@@ -120,9 +182,6 @@ class TopicCell: UITableViewCell {
                 self.avatarImage.setNeedsLayout()
             }
         }
-        
-        /// UIView.animate se le pasa una duracion y un closure. Hay otros constructores
-        
     }
         
     fileprivate func formattedDate(topicDate: String) -> String? {
@@ -139,12 +198,6 @@ class TopicCell: UITableViewCell {
     }
         
     fileprivate func setConstraints() {
-        /// Linea obligatoria cuando creamos vistas autolayout-ables por codigo
-        avatarImage.translatesAutoresizingMaskIntoConstraints = false
-        topicTitle.translatesAutoresizingMaskIntoConstraints = false
-        groupedStack.translatesAutoresizingMaskIntoConstraints = false
-            
-        // MARK: Avatar constraints
         NSLayoutConstraint.activate([
             /// Ajusta en horizontal a 16 del avatar y vertical centrado al padre
             avatarImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16.0),
@@ -154,15 +207,13 @@ class TopicCell: UITableViewCell {
             avatarImage.heightAnchor.constraint(equalToConstant: 64.0),
         ])
             
-        // MARK: Topic Title constraints
         NSLayoutConstraint.activate([
             /// Ajusta en horizontal a 91 por la izquierda, 14 por arriba y 59 por la derecha del padre.
-            topicTitle.topAnchor.constraint(equalTo: self.topAnchor, constant: 14.0),
-            topicTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 91.0),
-            topicTitle.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -59.0)
+            titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 14.0),
+            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 91.0),
+            titleLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -59.0)
         ])
             
-        // MARK: Stack constraints
         NSLayoutConstraint.activate([
             /// Ajusta por abajo y por la izquierda del padre
             groupedStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 91.0),
